@@ -25,7 +25,7 @@ export const useTaskStore = defineStore('tasks', {
         this.loading = false;
       }
     },
-    async addTask(name) {
+    async addTask(name, priority = 'medium') {
       const authStore = useAuthStore();
       if (!authStore.user) return;
       
@@ -33,7 +33,9 @@ export const useTaskStore = defineStore('tasks', {
         const response = await axios.post(API_URL, { 
           name, 
           completed: false,
-          userId: authStore.user.id 
+          priority: priority,
+          userId: authStore.user.id,
+          createdAt: new Date().toISOString()
         });
         this.tasks.unshift(response.data);
       } catch (err) {
